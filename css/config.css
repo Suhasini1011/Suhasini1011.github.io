@@ -1,0 +1,39 @@
+/* =====================================================================
+   THEME CONFIG — colours & fonts for the whole site.
+   Change a value here and it updates everywhere.
+   Keep text/background pairs at a contrast ratio of 4.5:1 or higher
+   (all pairs below pass; the lowest is 5.6:1).
+   ===================================================================== */
+
+:root {
+  /* ---------- COLOURS: deep navy, teal accent, indigo for charts ---------- */
+  --color-bg:          #0b0f17;  /* page background            */
+  --color-bg-alt:      #111827;  /* alternate section bg       */
+  --color-surface:     #161e2e;  /* cards, panels              */
+  --color-border:      #263247;  /* hairlines, card borders    */
+  --color-text:        #e8edf5;  /* main text                  */
+  --color-text-muted:  #9aa8bd;  /* secondary text             */
+  --color-accent:      #5eead4;  /* primary accent (teal)      */
+  --color-accent-2:    #818cf8;  /* secondary accent (indigo)  */
+  --color-accent-ink:  #04201c;  /* text placed ON the accent  */
+  --color-grid:        rgba(148, 163, 184, 0.08); /* background grid */
+  --color-shot-bg:     #f4f6fa;  /* backing behind screenshots */
+
+  /* ---------- FONTS (loaded from Google Fonts in index.html) ---------- */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* ---------- TYPE SCALE ---------- */
+  --fs-hero:  clamp(2.75rem, 8vw, 7rem);
+  --fs-h2:    clamp(2rem, 5vw, 3.75rem);
+  --fs-h3:    clamp(1.35rem, 2.4vw, 1.9rem);
+  --fs-body:  1.0625rem;
+  --fs-small: 0.875rem;
+
+  /* ---------- SHAPE & SPACING ---------- */
+  --radius:      14px;
+  --radius-sm:   8px;
+  --container:   1200px;
+  --section-pad: clamp(5rem, 12vh, 9rem);
+}

@@ -1,0 +1,174 @@
+/* =====================================================================
+   MOTION STYLES — only apply when js/animations.js is running.
+   html.motion       → full motion (desktop, motion allowed)
+   html.motion-lite  → phones: simple reveals only
+   html.has-cursor   → custom cursor active
+   ===================================================================== */
+
+/* Lenis takes over smooth scrolling */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto; }
+
+/* ------------------------------------------------------------- cursor */
+.has-cursor, .has-cursor * { cursor: none !important; }
+.cursor { position: fixed; left: 0; top: 0; z-index: 1000; pointer-events: none; }
+.cursor__dot, .cursor__ring {
+  position: fixed; left: 0; top: 0; border-radius: 50%;
+  translate: -50% -50%; will-change: transform;
+}
+.cursor__dot { width: 6px; height: 6px; background: var(--color-accent); }
+.cursor__ring {
+  width: 36px; height: 36px; border: 1px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  display: grid; place-items: center;
+  transition: width .3s cubic-bezier(.2,.8,.2,1), height .3s cubic-bezier(.2,.8,.2,1),
+              background-color .3s, border-color .3s, opacity .3s;
+}
+.cursor__label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--color-accent-ink); opacity: 0; transition: opacity .2s;
+}
+.cursor.is-link .cursor__ring {
+  width: 64px; height: 64px; border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.cursor.is-label .cursor__ring { width: 84px; height: 84px; background: var(--color-accent); border-color: var(--color-accent); }
+.cursor.is-label .cursor__label { opacity: 1; }
+.cursor.is-label .cursor__dot, .cursor.is-link .cursor__dot { opacity: 0; }
+.cursor.is-down .cursor__ring { scale: .85; }
+.cursor.is-hidden { opacity: 0; }
+
+/* --------------------------------------------------------------- hero */
+.motion .scroll-cue.is-done { opacity: 0; pointer-events: none; transition: opacity .5s; }
+
+/* -------------------------------------------------------------- about */
+.motion .about__pin {
+  height: 100vh; height: 100svh; padding: 0;
+  display: flex; align-items: center;
+}
+.motion .about__pin .container { position: relative; }
+.motion .story { display: grid; }
+.motion .story__line {
+  grid-area: 1 / 1; font-size: clamp(2rem, 4.6vw, 4rem); max-width: 22ch;
+  will-change: transform, opacity, filter;
+}
+.story__meter {
+  display: flex; align-items: center; gap: 1rem; margin-top: 3rem;
+  font-size: var(--fs-small); color: var(--color-text-muted);
+}
+.story__now { color: var(--color-accent); }
+.story__track { width: 140px; height: 1px; background: var(--color-border); overflow: hidden; }
+.story__fill { display: block; height: 100%; background: var(--color-accent); transform: scaleX(0); transform-origin: 0 50%; }
+.motion .stats { margin-top: 4rem; }
+
+/* ------------------------------------------------------- tilt + glare */
+.has-tilt .tilt { will-change: transform; }
+.has-tilt .tilt::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%),
+              color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 45%);
+  opacity: var(--go, 0); transition: opacity .3s;
+}
+.has-tilt .skills__grid, .has-tilt .repos { transform-style: preserve-3d; }
+
+/* ----------------------------------------------------------- projects */
+.motion .case { padding-block: 0; border-top: 0; }
+.motion .case__pin {
+  height: 100vh; height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-block: 84px 32px;
+}
+.motion .case__progress {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: .75rem;
+  margin-top: 1.75rem;
+}
+.motion .case__progress li {
+  font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--color-text-muted); padding-top: .7rem; position: relative;
+  transition: color .3s;
+}
+.motion .case__progress li::before, .motion .case__progress li::after {
+  content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%; border-radius: 2px;
+}
+.motion .case__progress li::before { background: var(--color-border); }
+.motion .case__progress li::after {
+  background: var(--color-accent); transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.motion .case__progress li.is-active { color: var(--color-text); }
+.motion .case__progress li.is-active::after,
+.motion .case__progress li.is-done::after { transform: scaleX(1); }
+.motion .case__progress li.is-done { color: var(--color-accent); }
+
+.motion .case__steps { display: grid; margin-top: 2rem; gap: 0; }
+.motion .case__step { grid-area: 1 / 1; }
+.motion .case__visual {
+  /* fill what the viewport leaves after header, tracker and buttons */
+  height: clamp(200px, calc(100vh - 430px), 440px);
+  height: clamp(200px, calc(100svh - 430px), 440px);
+  aspect-ratio: auto;
+  will-change: transform, opacity;
+}
+@media (max-width: 960px) { /* tablets: text stacks above the visual */
+  .motion .case__visual { height: clamp(180px, calc(100svh - 640px), 420px); }
+  .motion .case__steps { margin-top: 1.5rem; }
+  .motion .case__step { gap: 1.25rem; }
+}
+@media (max-height: 760px) { /* short laptop screens */
+  .motion .case__pin { padding-block: 72px 20px; }
+  .motion .case__progress { margin-top: 1rem; }
+  .motion .case__steps { margin-top: 1.25rem; }
+  .motion .case__links { margin-top: 1.25rem; }
+  .motion .case__step-heading { font-size: clamp(1.35rem, 2.4vw, 1.9rem); }
+}
+.motion .case__links { margin-top: 2rem; }
+.motion .bar__rect { will-change: transform; }
+
+/* ------------------------------------------------------------ gallery */
+.motion .gallery { overflow: hidden; padding-block: 0; height: 100vh; height: 100svh; display: flex; align-items: center; }
+.motion .gallery__track { will-change: transform; }
+.motion .gshot__ph { display: block; }
+
+/* ----------------------------------------------------------- portrait */
+.motion .portrait__frame { will-change: clip-path; }
+.motion .portrait__frame img { will-change: transform; }
+.motion .about__grid { align-items: center; }
+.motion .portrait { width: min(100%, 400px); max-height: 74vh; }
+.motion .portrait__frame { max-height: 68vh; aspect-ratio: 4 / 5; }
+
+/* ------------------------------------------------------------ process */
+.pipeline-on .pipeline__stages::before { background: var(--color-border); }
+.pipeline__fill {
+  position: absolute; left: 32px; right: 32px; top: 32px; height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+  transform-origin: 0 50%; z-index: 0;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
+/* unlit stages dim only the node and title; descriptions stay at readable contrast */
+.pipeline-on .stage .stage__name { opacity: .55; transition: opacity .5s; }
+.pipeline-on .stage .stage__node { border-color: var(--color-border); color: var(--color-text-muted); }
+.pipeline-on .stage.is-lit .stage__name { opacity: 1; }
+.pipeline-on .stage.is-lit .stage__node {
+  border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 18%, transparent),
+              0 0 28px color-mix(in srgb, var(--color-accent) 50%, transparent);
+}
+.motion .process { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; }
+.motion .process > .container { width: min(100% - 2.5rem, var(--container)); }
+@media (max-width: 960px) {
+  .pipeline__fill {
+    left: 31px; right: auto; top: 32px; bottom: 32px; width: 2px; height: auto;
+    background: linear-gradient(var(--color-accent), var(--color-accent-2)); transform-origin: 50% 0;
+  }
+}
+
+/* --------------------------------------------------------- experience */
+.motion .timeline__fill, .motion-lite .timeline__fill { box-shadow: 0 0 10px color-mix(in srgb, var(--color-accent) 60%, transparent); }
+.role.is-on .role__dot { background: var(--color-accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent) 20%, transparent); }
+
+/* ------------------------------------------------------------ contact */
+.magnetic { will-change: transform; }
+.magnetic span { display: inline-block; pointer-events: none; }
+
+/* ---------------------------------------------------- keyboard focus */
+/* While navigating by keyboard, anything holding focus is fully visible. */
+.kbd :focus-within, .kbd :focus-visible { opacity: 1 !important; }
