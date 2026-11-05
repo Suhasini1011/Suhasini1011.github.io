@@ -332,6 +332,12 @@ window.SITE = {
         org: "Jade Global",
         points: ["Cloud application administration, incident management and operational reporting."],
       },
+      {
+        period: "2018 – 2022",
+        title: "B.E. Computer Engineering — CGPA 8.36/10",
+        org: "Indira College of Engineering & Management, University of Pune",
+        points: ["Foundation in programming, databases and software engineering."],
+      },
     ],
   },
 
