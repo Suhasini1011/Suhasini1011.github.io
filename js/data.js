@@ -43,10 +43,10 @@ window.SITE = {
   about: {
     label: "About",
     story: [
-      "I started in application support, writing SQL to find out why things broke.",
-      "Then I owned the SaaS apps that about 5,000 people at Uber relied on every day.",
-      "I owned projects end to end, from requirements to rollout, working in Agile sprints.",
-      "Every ticket, licence and escalation turned out to be a dataset worth reading.",
+      "I started in application support, using SQL to find out why things broke.",
+      "At Uber, I turned ticket, licence and SLA data into reports leadership used to make decisions.",
+      "I owned projects end to end in Agile sprints, from requirements to rollout, including an SSO migration for 5,000 users.",
+      "Analysing escalation patterns helped me cut escalations by 50%, and showed me what good analysis can change.",
       "Now, with a First Class MSc in Business Analytics, I build the analysis behind the decisions.",
     ],
     // Portrait beside the story. Set src to "" to hide it.
@@ -57,9 +57,9 @@ window.SITE = {
       caption: "University College Cork, Ireland",
     },
     stats: [
-      { value: 3, suffix: "+", label: "Years in business systems & support" },
-      { value: 5000, prefix: "~", suffix: "", label: "Users supported at Uber" },
+      { value: 3, suffix: "+", label: "Years in business systems & analysis" },
       { value: 8, suffix: "", label: "Analytics projects (7 on GitHub + MSc dissertation)" },
+      { value: 50, suffix: "%", label: "Fewer escalations at Uber" },
     ],
   },
 
