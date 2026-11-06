@@ -48,7 +48,7 @@ html.lenis { scroll-behavior: auto; }
 .motion .about__pin .container { position: relative; }
 .motion .story { display: grid; }
 .motion .story__line {
-  grid-area: 1 / 1; font-size: clamp(2rem, 4.6vw, 4rem); max-width: 22ch;
+  grid-area: 1 / 1; font-size: clamp(1.9rem, 3.9vw, 3.4rem); max-width: 24ch;
   will-change: transform, opacity, filter;
 }
 .story__meter {
