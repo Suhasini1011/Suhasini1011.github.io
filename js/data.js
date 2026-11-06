@@ -45,6 +45,7 @@ window.SITE = {
     story: [
       "I started in application support, writing SQL to find out why things broke.",
       "Then I owned the SaaS apps that about 5,000 people at Uber relied on every day.",
+      "I owned projects end to end, from requirements to rollout, working in Agile sprints.",
       "Every ticket, licence and escalation turned out to be a dataset worth reading.",
       "Now, with a First Class MSc in Business Analytics, I build the analysis behind the decisions.",
     ],
