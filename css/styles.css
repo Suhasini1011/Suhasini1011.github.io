@@ -16,7 +16,9 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  overflow-x: clip;
 }
+html { overflow-x: hidden; overflow-x: clip; }
 img, svg, canvas { display: block; max-width: 100%; }
 h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.08; margin: 0; letter-spacing: -0.02em; }
 p { margin: 0; }
@@ -105,6 +107,16 @@ main > section { z-index: 1; }
 }
 .nav__logo:hover { border-color: var(--color-accent); color: var(--color-accent); }
 .nav__links { display: flex; gap: .25rem; }
+.nav__toggle {
+  display: none; align-items: center; gap: .6rem; min-height: 44px; padding: .5rem .9rem;
+  background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border);
+  border-radius: 999px; font: 500 .9rem var(--font-body); cursor: pointer;
+}
+.nav__toggle:hover { border-color: var(--color-accent); }
+.nav__toggle-icon { display: grid; gap: 4px; width: 16px; }
+.nav__toggle-icon span { display: block; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s; }
+.nav.is-open .nav__toggle-icon span:first-child { transform: translateY(3px) rotate(45deg); }
+.nav.is-open .nav__toggle-icon span:last-child { transform: translateY(-3px) rotate(-45deg); }
 .nav__link {
   font-size: var(--fs-small); padding: .5rem .8rem; border-radius: 999px;
   color: var(--color-text-muted); transition: color .2s, background-color .2s;
@@ -284,6 +296,31 @@ main > section { z-index: 1; }
 .gshot { aspect-ratio: 16 / 10; height: auto; }
 .gallery__caption { color: var(--color-text-muted); font-size: var(--fs-small); margin-top: .75rem; font-family: var(--font-mono); }
 
+/* ---------------------------------------------------- more case studies */
+.more { padding-block: 3rem 0; }
+.more__title { font-size: var(--fs-h3); margin-bottom: 1.5rem; }
+.more__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1rem; perspective: 1000px; }
+.more-card {
+  --rx: 0deg; --ry: 0deg;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+  padding: 1.75rem; display: flex; flex-direction: column; gap: .75rem; position: relative;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: border-color .25s, transform .2s ease-out;
+}
+.more-card:hover, .more-card:focus-within { border-color: color-mix(in srgb, var(--color-accent) 50%, var(--color-border)); }
+.more-card__context { font-family: var(--font-mono); font-size: .75rem; color: var(--color-text-muted); }
+.more-card__title { font-size: 1.3rem; }
+.more-card__stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem .6rem; margin-top: .25rem; }
+.more-card__num {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(2.25rem, 4vw, 3rem); line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(120deg, var(--color-accent), var(--color-accent-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.more-card__label { color: var(--color-text); font-size: .95rem; }
+.more-card__text { color: var(--color-text-muted); font-size: .95rem; flex: 1; }
+.more-card__links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.btn--sm { min-height: 44px; padding: .55rem 1.1rem; font-size: .875rem; }
+
 /* --------------------------------------------------------------- github */
 .repos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 3rem; perspective: 1000px; }
 .repo {
@@ -376,11 +413,16 @@ main > section { z-index: 1; }
   .stage__text { grid-column: 2; margin-top: .25rem; }
 }
 @media (max-width: 767px) {
-  .nav__inner { gap: .75rem; }
-  .nav nav { min-width: 0; }
-  .nav__links { overflow-x: auto; scrollbar-width: none; mask-image: linear-gradient(90deg, #000 85%, transparent); }
-  .nav__links::-webkit-scrollbar { display: none; }
-  .nav__link { white-space: nowrap; padding: .5rem .6rem; }
+  /* phones: links collapse into a Menu button with a drop-down panel */
+  .nav__toggle { display: inline-flex; }
+  .nav__links {
+    display: none; position: absolute; top: calc(100% + .25rem); right: 1.25rem; left: 1.25rem;
+    flex-direction: column; gap: .15rem; padding: .5rem;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .45);
+  }
+  .nav.is-open .nav__links { display: flex; }
+  .nav__link { display: block; padding: .8rem 1rem; font-size: 1rem; color: var(--color-text); border-radius: var(--radius-sm); }
   .stats { grid-template-columns: 1fr; }
   .hero__headline { margin-top: 1.5rem; }
   /* phones: the horizontal gallery becomes a simple vertical stack */

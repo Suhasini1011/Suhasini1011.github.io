@@ -21,6 +21,7 @@
       : `href="${esc(url)}"${external ? ' target="_blank" rel="noopener"' : ""}`;
 
   const fmt = (n) => Number(n).toLocaleString("en-US");
+  const fmtD = (n, d = 0) => Number(n).toLocaleString("en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
 
   /* ---------------------------------------------------------- simple binds */
   document.querySelectorAll("[data-bind]").forEach((el) => {
@@ -82,6 +83,7 @@
     map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/>',
     spark: '<path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l3.5 3.5M15.5 15.5 19 19M5 19l3.5-3.5M15.5 8.5 19 5"/>',
     lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    funnel: '<path d="M3 4h18l-7 8v6l-4 2v-8z"/>',
   };
   const icon = (k) =>
     `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[k] || ICONS.chart}</svg>`;
@@ -156,7 +158,7 @@
     return `<div class="kpis">${v.items
       .map(
         (k) => `<div class="kpi">
-          <span class="kpi__value">${esc(k.prefix || "")}<span class="count" data-count="${k.value}">${fmt(k.value)}</span>${esc(k.suffix || "")}</span>
+          <span class="kpi__value">${esc(k.prefix || "")}<span class="count" data-count="${k.value}" data-decimals="${k.decimals || 0}">${fmtD(k.value, k.decimals)}</span>${esc(k.suffix || "")}</span>
           <span class="kpi__label">${esc(k.label)}</span>
         </div>`
       )
@@ -224,6 +226,29 @@
     )
     .join("");
 
+  /* ---------------------------------------------------- more case studies */
+  const M = S.projects.more;
+  if (M && M.items && M.items.length) {
+    $("#more-title").textContent = M.title;
+    $("#more-grid").innerHTML = M.items
+      .map(
+        (m) => `
+      <li class="more-card tilt">
+        <p class="more-card__context">${esc(m.context)}</p>
+        <h4 class="more-card__title">${esc(m.title)}</h4>
+        ${m.stat ? `<p class="more-card__stat"><span class="more-card__num">${esc(m.stat.prefix || "")}<span class="count" data-count="${m.stat.value}" data-decimals="${m.stat.decimals || 0}">${fmtD(m.stat.value, m.stat.decimals)}</span>${esc(m.stat.suffix || "")}</span> <span class="more-card__label">${esc(m.stat.label)}</span></p>` : ""}
+        <p class="more-card__text">${esc(m.text)}</p>
+        <div class="more-card__links">
+          <a class="btn btn--primary btn--sm" ${linkAttrs(m.links.github)}><span>View on GitHub</span></a>
+          <a class="btn btn--ghost btn--sm" ${linkAttrs(m.links.findings)}><span>Read the findings</span></a>
+        </div>
+      </li>`
+      )
+      .join("");
+  } else {
+    $("#more").remove();
+  }
+
   /* -------------------------------------------------------------- process */
   $("#pipeline").innerHTML = S.process.stages
     .map(
@@ -269,6 +294,20 @@
   $("#github-profile").href = S.github.profileUrl;
   $("#github-profile").target = "_blank";
   $("#github-profile").rel = "noopener";
+
+  // Phone menu: open/close, close on link tap, Escape or tap outside.
+  const navEl = $("#nav"), toggle = $(".nav__toggle", navEl);
+  const setMenu = (open) => {
+    navEl.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    $(".nav__toggle-text", toggle).textContent = open ? "Close" : "Menu";
+  };
+  toggle.addEventListener("click", () => setMenu(!navEl.classList.contains("is-open")));
+  $("#nav-links").addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navEl.classList.contains("is-open")) { setMenu(false); toggle.focus(); }
+  });
+  document.addEventListener("click", (e) => { if (!navEl.contains(e.target)) setMenu(false); });
 
   // Placeholder links do nothing (instead of jumping to the top).
   document.addEventListener("click", (e) => {

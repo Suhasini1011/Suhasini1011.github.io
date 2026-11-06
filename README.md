@@ -40,6 +40,14 @@ Each project has 3–4 `steps`, and each step has a `visual`:
 
 The pinned scroll animation, step tracker and chart drawing adapt automatically.
 
+For a smaller card in **More case studies** (below the gallery), add an entry to `projects.more.items`
+with a `title`, `context`, one `stat`, a line of `text` and `links`.
+
+KPI and card numbers can show decimals: add `decimals: 1` (or 2) next to `value`.
+
+**After any change,** bump the `?v=` number for the changed file in `index.html` (for example
+`js/data.js?v=6` → `?v=7`), so browsers load the new copy instead of an old saved one.
+
 ### Fonts
 The site uses Space Grotesk, Inter and JetBrains Mono from Google Fonts.
 To change them, edit the `<link>` in `index.html` and the three `--font-*` lines in `css/config.css`.

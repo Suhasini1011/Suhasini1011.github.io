@@ -59,7 +59,7 @@ window.SITE = {
     stats: [
       { value: 3, suffix: "+", label: "Years in business systems & support" },
       { value: 5000, prefix: "~", suffix: "", label: "Users supported at Uber" },
-      { value: 6, suffix: "", label: "Analytics projects (5 on GitHub + MSc dissertation)" },
+      { value: 8, suffix: "", label: "Analytics projects (7 on GitHub + MSc dissertation)" },
     ],
   },
 
@@ -69,9 +69,11 @@ window.SITE = {
     title: "The toolkit",
     groups: [
       { area: "SQL & Data", icon: "db",
-        items: ["SQL", "PostgreSQL", "SQLite", "Star schemas", "Data cleaning", "Cross-system reconciliation"] },
+        items: ["SQL", "PostgreSQL", "Google BigQuery", "SQLite", "Star schemas", "Data cleaning", "Cross-system reconciliation"] },
       { area: "BI & Visualisation", icon: "chart",
-        items: ["Power BI", "DAX", "Tableau", "Streamlit", "Dashboard design"] },
+        items: ["Power BI", "DAX", "Tableau", "Data Studio", "Streamlit", "Dashboard design"] },
+      { area: "Product Analytics", icon: "funnel",
+        items: ["A/B testing", "Statistical significance", "Funnel analysis", "Cohort retention", "GA4"] },
       { area: "Excel", icon: "grid",
         items: ["Microsoft Excel", "Power Query", "Pivot tables", "What-if models"] },
       { area: "Python", icon: "code",
@@ -81,7 +83,7 @@ window.SITE = {
       { area: "Business Analysis", icon: "map",
         items: ["Requirements gathering", "Process mapping", "BRDs / FRDs", "Gap analysis", "Lucidchart"] },
       { area: "Generative AI", icon: "spark",
-        items: ["AI enablement & risk assessment", "Prompt engineering", "Microsoft Copilot", "Claude", "ChatGPT", "Perplexity", "Output validation"] },
+        items: ["AI enablement & risk assessment", "Prompt engineering", "Microsoft Copilot", "Claude", "ChatGPT", "Perplexity", "Output validation", "Text-to-SQL", "LLM evaluation"] },
       { area: "Identity & Governance", icon: "lock",
         items: ["Okta", "SAML SSO", "Active Directory", "Access reviews"] },
     ],
@@ -91,7 +93,7 @@ window.SITE = {
   projects: {
     label: "Projects",
     title: "Selected case studies",
-    intro: "Four projects, each from question to answer. Every number shown is published in the project's repository.",
+    intro: "Four featured projects, each from question to answer. Every number shown is published in the project's repository.",
 
     /* visual.type options:
          "bar"   → { labels:[], values:[], unit:"" }
@@ -99,6 +101,49 @@ window.SITE = {
          "kpi"   → { items:[{ value, prefix, suffix, label }] }
          "image" → { src:"assets/…", alt:"…" } */
     items: [
+      {
+        id: "ask-your-data",
+        title: "Ask Your Data",
+        context: "Text-to-SQL assistant on 100k Olist orders · Python · LLM (Groq) · PostgreSQL · Streamlit",
+        tags: ["Python", "LLM", "SQL", "Streamlit"],
+        steps: [
+          {
+            label: "Problem",
+            heading: "Can people ask data questions in plain English and trust the answer?",
+            text: "Ask a question about 100k eCommerce orders in plain English. The assistant writes the SQL, checks it, runs it read-only, and shows the answer alongside the query behind it.",
+            visual: { type: "image", src: "assets/projects/ask-your-data-answer.webp", alt: "Ask Your Data app answering what percentage of customers are repeat customers (2.17) with the SQL query shown below" },
+          },
+          {
+            label: "Approach",
+            heading: "The AI writes the query, the database gives the number",
+            text: "The model gets the schema plus 11 business rules. Every query passes a safety check and runs as a read-only database user with a 10-second timeout. A failed query is sent back once for self-correction.",
+            visual: { type: "kpi", items: [
+              { value: 4, label: "Layers of safety" },
+              { value: 11, label: "Business rules given to the model" },
+            ] },
+          },
+          {
+            label: "Key finding",
+            heading: "The definitions decide the answer",
+            text: "Asked what share of customers come back, the naive query counts customers with 2+ orders. With the business rules it counts distinct purchase days, because one checkout can create several orders, and gets the correct answer.",
+            visual: { type: "bar", unit: "%",
+              labels: ["Naive query", "With business rules"],
+              values: [3.04, 2.17] },
+          },
+          {
+            label: "Impact",
+            heading: "Tested, not just trusted",
+            text: "On 19 questions with known answers, including 2 it must refuse, the first run scored 18/19. After three general fixes, not one-off patches, it scored 19/19 on 3 consecutive runs.",
+            visual: { type: "kpi", items: [
+              { value: 19, suffix: "/19", label: "Correct on 3 consecutive runs" },
+            ] },
+          },
+        ],
+        links: {
+          github: "https://github.com/Suhasini1011/ask-your-data",
+          findings: "https://github.com/Suhasini1011/ask-your-data/blob/HEAD/eval_results.md",
+        },
+      },
       {
         id: "olist",
         title: "Olist eCommerce Analytics",
@@ -135,6 +180,50 @@ window.SITE = {
         links: {
           github: "https://github.com/Suhasini1011/olist-ecommerce-analytics",
           findings: "https://github.com/Suhasini1011/olist-ecommerce-analytics/blob/HEAD/docs/findings.md",
+        },
+      },
+      {
+        id: "product-analytics",
+        title: "Product Analytics in BigQuery",
+        context: "Real GA4 store events + a mobile-game A/B test · SQL in Google BigQuery · Data Studio",
+        tags: ["SQL", "BigQuery", "A/B testing", "Data Studio"],
+        steps: [
+          {
+            label: "Problem",
+            heading: "Where do shoppers drop out, and did a game change hurt retention?",
+            text: "Three months of real, anonymised Google Merchandise Store events, plus the Cookie Cats A/B test, which moved a game's first gate from level 30 to level 40.",
+            visual: { type: "kpi", items: [
+              { value: 267116, label: "Store visitors" },
+              { value: 90189, label: "A/B test players" },
+            ] },
+          },
+          {
+            label: "Approach",
+            heading: "Funnels, cohorts and significance tests, all in SQL",
+            text: "A conversion funnel with window functions, weekly retention cohorts based on first visit, and two-proportion z-tests with a sample ratio check, all written in BigQuery SQL and shown in Data Studio.",
+            visual: { type: "image", src: "assets/projects/product-analytics-dashboard.webp", alt: "Data Studio dashboard: visitors, purchasers, conversion funnel, funnel by device, retention cohorts and A/B test results" },
+          },
+          {
+            label: "Key finding",
+            heading: "Only 1.7% of visitors buy",
+            text: "77% of visitors never view a product, and 41% of shoppers who start checkout drop out at payment. All devices convert at 1.6–1.7%, so the problem is the site, not the device.",
+            visual: { type: "bar", unit: "%",
+              labels: ["Visit", "View item", "Cart", "Checkout", "Purchase"],
+              values: [100, 22.9, 4.7, 3.6, 1.7] },
+          },
+          {
+            label: "Impact",
+            heading: "Keep the gate at 30, but check the split",
+            text: "Moving the gate to level 40 lowered 7-day retention (z = −3.16, significant). But the 50/50 split failed a sample ratio check (z = 2.63), so player assignment needs auditing before the size of the effect is trusted.",
+            visual: { type: "kpi", items: [
+              { value: 19.02, decimals: 2, suffix: "%", label: "7-day retention · gate at 30" },
+              { value: 18.20, decimals: 2, suffix: "%", label: "7-day retention · gate at 40" },
+            ] },
+          },
+        ],
+        links: {
+          github: "https://github.com/Suhasini1011/product-analytics-bigquery",
+          findings: "https://github.com/Suhasini1011/product-analytics-bigquery/blob/HEAD/docs/findings.md",
         },
       },
       {
@@ -178,97 +267,45 @@ window.SITE = {
           findings: "https://github.com/Suhasini1011/service-analytics-agent#key-results-on-the-synthetic-data",
         },
       },
-      {
-        id: "iam-migration",
-        title: "IAM Migration & Access Governance",
-        context: "OneLogin → Okta for Figma and Adobe · case study on synthetic data",
-        tags: ["SQL", "Tableau", "Excel / Power Query", "BPMN"],
-        steps: [
-          {
-            label: "Problem",
-            heading: "Onboarding took up to 48 hours",
-            text: "Figma access was auto-provisioned with no governance, while Adobe needed fully manual service-desk approval. The result was delays, over-provisioning and no view of high-risk access.",
-            visual: { type: "kpi", items: [{ value: 48, suffix: " hrs", label: "Worst-case onboarding time" }] },
-          },
-          {
-            label: "Approach",
-            heading: "RBAC in Okta, plus a live governance dashboard",
-            text: "Prepared the data in Excel and Power Query, analysed approvals, SLA and risk in SQL, mapped AS-IS and TO-BE in BPMN, and built a Tableau dashboard.",
-            visual: { type: "image", src: "assets/projects/iam-dashboard.webp", alt: "Tableau dashboard: migration status, SLA performance, risk by department and approval distribution" },
-          },
-          {
-            label: "Key finding",
-            heading: "Manual approvals caused the SLA breaches",
-            text: "43.4% of approvals were manual and took 25.1 hours on average, against 0.95 hours when automated. Only 61.2% of requests met the 5-hour SLA.",
-            visual: { type: "bar", unit: " hrs",
-              labels: ["Manual approval", "Automated"],
-              values: [25.1, 0.95] },
-          },
-          {
-            label: "Impact",
-            heading: "Designed TO-BE: minutes, not days",
-            text: "With RBAC checks in Okta, access is provisioned instantly and routed to the service desk only when a licence constraint applies.",
-            visual: { type: "kpi", items: [
-              { value: 96, suffix: "%", label: "Faster onboarding (projected)" },
-              { value: 85, suffix: "%", label: "Less manual effort (projected)" },
-            ] },
-          },
-        ],
-        links: {
-          github: "https://github.com/Suhasini1011/IAM-Migration-Access-Governance",
-          findings: "https://github.com/Suhasini1011/IAM-Migration-Access-Governance/blob/HEAD/docs/IAM_Migration_Case_Study.pdf",
-        },
-      },
-      {
-        id: "escalations",
-        title: "IT Support Escalation Analysis",
-        context: "L1/L2 → L4 AppOps escalations · rebuilt on synthetic data from real work",
-        tags: ["SQL", "Tableau", "Lucidchart", "BRD"],
-        steps: [
-          {
-            label: "Problem",
-            heading: "Avoidable escalations were eating L4 capacity",
-            text: "Licence and access tickets for apps like Zoom, Box and Figma kept reaching the L4 team. That time could have gone to cost optimisation and governance.",
-            visual: { type: "image", src: "assets/projects/l4-as-is.webp", alt: "AS-IS swimlane: L1 receives ticket, L2/L3 has no access or runbook, escalates to L4" },
-          },
-          {
-            label: "Approach",
-            heading: "SQL on 100 tickets, then a Tableau dashboard",
-            text: "Wrote eight verified SQL queries on SLA, reasons, apps and source teams. SLA held mostly at 100%, with dips in January, February, May and October.",
-            visual: { type: "line", unit: "%", min: 80, max: 100, // y-axis range
-              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-              values: [90.9, 88.9, 100, 100, 90, 100, 100, 100, 100, 87.5] },
-          },
-          {
-            label: "Key finding",
-            heading: "Access gaps were the top reason",
-            text: "29% of escalations happened because L1/L2 lacked admin permissions, and 23% because of missing knowledge articles.",
-            visual: { type: "bar", unit: "%",
-              labels: ["Access gap", "Bug / tech", "Policy", "Knowledge"],
-              values: [29, 24, 24, 23] },
-          },
-          {
-            label: "Impact",
-            heading: "Half of escalations are preventable",
-            text: "The TO-BE process gives L2 delegated admin for routine fixes, requires a KB article after every knowledge-gap escalation, and adds a Zoom runbook.",
-            visual: { type: "kpi", items: [{ value: 52, suffix: "%", label: "Of escalations preventable" }] },
-          },
-        ],
-        links: {
-          github: "https://github.com/Suhasini1011/L4-IT-Escalation-Analysis",
-          findings: "https://github.com/Suhasini1011/L4-IT-Escalation-Analysis/blob/HEAD/docs/L4-Escalations-Case-Study.pdf",
-        },
-      },
     ],
 
     /* Horizontal gallery after the case studies. */
     gallery: [
+      { src: "assets/projects/ask-your-data-app.webp", alt: "Ask Your Data app answering top 10 product categories by revenue with a table and bar chart", caption: "Ask Your Data · Streamlit app" },
       { src: "assets/projects/olist-delivery.webp", alt: "Power BI page on delivery and reviews: late rate by state and low-score rate by lateness", caption: "Olist · Power BI delivery & reviews page" },
+      { src: "assets/projects/product-analytics-dashboard.webp", alt: "Data Studio product analytics dashboard with funnel, retention cohorts and A/B test", caption: "Product Analytics · BigQuery + Data Studio" },
       { src: "assets/projects/tickets-dashboard.webp", alt: "Tableau customer ticket dashboard: weekly SLA, ticket status, team performance and CSAT", caption: "Customer Ticket Analytics · Tableau" },
       { src: "assets/projects/olist-whatif.webp", alt: "Excel what-if model estimating reviews saved and revenue gained from fewer late deliveries", caption: "Olist · Excel what-if model" },
       { src: "assets/projects/l4-to-be.webp", alt: "TO-BE swimlane diagram for IT escalations with runbook, KB and admin access checks", caption: "Escalation Analysis · TO-BE process" },
       { src: "assets/projects/olist-revenue.webp", alt: "Power BI revenue page: revenue by category and seller state", caption: "Olist · Power BI revenue page" },
     ],
+
+    /* Smaller cards below the gallery. Same link format as above. */
+    more: {
+      title: "More case studies",
+      items: [
+        {
+          title: "IAM Migration & Access Governance",
+          context: "OneLogin → Okta for Figma and Adobe · SQL, Tableau, BPMN",
+          stat: { value: 43.4, decimals: 1, suffix: "%", label: "of approvals were manual" },
+          text: "Manual approvals took 25.1 hours on average, against 0.95 hours when automated.",
+          links: {
+            github: "https://github.com/Suhasini1011/IAM-Migration-Access-Governance",
+            findings: "https://github.com/Suhasini1011/IAM-Migration-Access-Governance/blob/HEAD/docs/IAM_Migration_Case_Study.pdf",
+          },
+        },
+        {
+          title: "IT Support Escalation Analysis",
+          context: "L1/L2 → L4 escalations · SQL, Tableau, Lucidchart",
+          stat: { value: 52, suffix: "%", label: "of escalations were preventable" },
+          text: "Access gaps were the top reason (29%), followed by missing knowledge articles (23%).",
+          links: {
+            github: "https://github.com/Suhasini1011/L4-IT-Escalation-Analysis",
+            findings: "https://github.com/Suhasini1011/L4-IT-Escalation-Analysis/blob/HEAD/docs/L4-Escalations-Case-Study.pdf",
+          },
+        },
+      ],
+    },
   },
 
   /* ----------------------------------------------- GITHUB (live repos) */

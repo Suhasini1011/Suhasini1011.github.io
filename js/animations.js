@@ -309,7 +309,8 @@
   }
 
   /* =========================================================== SHARED */
-  const fmt = (n) => Math.round(n).toLocaleString("en-US");
+  const fmt = (n, d = 0) => Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const decimalsOf = (el) => parseInt(el.dataset.decimals || "0", 10) || 0;
 
   /* Count a .count[data-count] element from 0 to its value. */
   function countUp(el, { duration = 1.8, delay = 0 } = {}) {
@@ -318,7 +319,7 @@
     el.textContent = "0";
     return gsap.to(o, {
       v: end, duration, delay, ease: "power3.out",
-      onUpdate: () => (el.textContent = fmt(o.v)),
+      onUpdate: () => (el.textContent = fmt(o.v, decimalsOf(el))),
     });
   }
 
@@ -484,7 +485,7 @@
         const end = parseFloat(el.dataset.count) || 0, o = { v: 0 };
         tl.fromTo(o, { v: 0 }, {
           v: end, duration: 1.4, ease: "power2.out",
-          onUpdate: () => (el.textContent = fmt(o.v)),
+          onUpdate: () => (el.textContent = fmt(o.v, decimalsOf(el))),
         }, 0);
       });
       tl.from($$(".kpi__label", visual), { opacity: 0, y: 10, duration: 0.6 }, 0.3);
@@ -599,6 +600,23 @@
       }));
   }
 
+  /* "More case studies" cards: stagger in, numbers count up. */
+  function moreReveal({ depth }) {
+    const wrap = $("#more");
+    if (!wrap) return;
+    gsap.from(".more__title", {
+      opacity: 0, y: 24, duration: 0.8, ease: "power3.out",
+      scrollTrigger: { trigger: wrap, start: "top 85%", once: true },
+    });
+    const cards = $$(".more-card", wrap);
+    gsap.set(cards, depth ? { opacity: 0, y: 60, rotateX: -14, transformOrigin: "50% 100%" } : { opacity: 0, y: 30 });
+    ScrollTrigger.batch(cards, {
+      start: "top 90%", once: true,
+      onEnter: (b) => gsap.to(b, { opacity: 1, y: 0, rotateX: 0, duration: 0.8, ease: "power3.out", stagger: 0.1, clearProps: "transform" }),
+    });
+    countOnView(wrap);
+  }
+
   /* GitHub cards arrive after a network request → animate whenever ready. */
   function githubReveal({ depth }) {
     const run = () => {
@@ -682,18 +700,21 @@
     // Each role pops in when the line reaches its dot.
     $$(".role", tl).forEach((role) => {
       const dot = $(".role__dot", role), card = $(".role__card", role);
-      gsap.set(card, { opacity: 0, x: 40, scale: 0.94, transformOrigin: "0% 50%" });
+      const hidden = root.classList.contains("motion-lite")
+        ? { opacity: 0, y: 30, scale: 0.97 }            // phones: no sideways offset
+        : { opacity: 0, x: 40, scale: 0.94 };
+      gsap.set(card, { ...hidden, transformOrigin: "0% 50%" });
       gsap.set(dot, { scale: 0 });
       ScrollTrigger.create({
         trigger: dot, start: DRAW_LINE,
         onEnter: () => {
           gsap.to(dot, { scale: 1, duration: 0.5, ease: "back.out(3)" });
-          gsap.to(card, { opacity: 1, x: 0, scale: 1, duration: 0.8, ease: "back.out(1.4)" });
+          gsap.to(card, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.4)" });
           role.classList.add("is-on");
         },
         onLeaveBack: () => {
           gsap.to(dot, { scale: 0, duration: 0.3 });
-          gsap.to(card, { opacity: 0, x: 40, scale: 0.94, duration: 0.4, ease: "power2.in" });
+          gsap.to(card, { ...hidden, duration: 0.4, ease: "power2.in" });
           role.classList.remove("is-on");
         },
       });
@@ -769,6 +790,7 @@
       skillsReveal({ depth: true });
       casesPinned();
       galleryHorizontal();
+      moreReveal({ depth: true });
       cleanups.push(githubReveal({ depth: true }));
       cleanups.push(processPipeline({ pinned: !!wide }));
       experienceTimeline();
@@ -784,6 +806,7 @@
       skillsReveal({ depth: false });
       casesLite();
       galleryLite();
+      moreReveal({ depth: false });
       cleanups.push(githubReveal({ depth: false }));
       cleanups.push(processPipeline({ pinned: false }));
       experienceTimeline();
