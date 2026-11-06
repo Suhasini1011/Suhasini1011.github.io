@@ -284,7 +284,9 @@
     .join("");
   const email = $("#contact-email");
   email.href = `mailto:${C.email}`;
-  $("#contact-address").innerHTML = `<span class="mono">${esc(C.email)}</span>`;
+  $("#contact-address").innerHTML =
+    `<span class="mono">${esc(C.email)}</span>` +
+    (C.location ? `<span class="contact__sep" aria-hidden="true">·</span><span class="contact__location"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>${esc(C.location)}</span>` : "");
   const li = $("#contact-linkedin");
   if (isPlaceholder(C.linkedin)) { li.href = "#"; li.dataset.placeholderLink = ""; }
   else { li.href = C.linkedin; li.target = "_blank"; }
