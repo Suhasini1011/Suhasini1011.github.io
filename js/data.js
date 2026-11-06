@@ -32,7 +32,7 @@ window.SITE = {
 
   /* ------------------------------------------------------------- HERO */
   hero: {
-    eyebrow: "Portfolio · 2026",
+    eyebrow: "Portfolio · Pune, Maharashtra, India",
     name: "Suhasini Pillay",
     role: "Data & Business Systems Analyst",
     headline: "I turn service and business data into decisions people act on.",
@@ -385,6 +385,7 @@ window.SITE = {
     headline: ["Let's find the story", "in your data."],
     text: "Open to business analyst, data analyst and application support roles. The fastest way to reach me is email.",
     email: "pillaysuhasini346@gmail.com",
+    location: "Pune, Maharashtra, India", // city only: no street address on a public site
     linkedin: "https://www.linkedin.com/in/suhasini-pillay-b9a644196",
     cv: "assets/Suhasini_Pillay_CV.pdf",
   },
