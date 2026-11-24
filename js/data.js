@@ -12,9 +12,9 @@
 window.SITE = {
   /* ------------------------------------------------------------- META */
   meta: {
-    title: "Suhasini Pillay — Data & Business Systems Analyst",
+    title: "Suhasini Pillay — IT & Business Systems Analyst",
     description:
-      "Portfolio of Suhasini Pillay, data and business systems analyst: SQL, Power BI, Tableau, Python and ITSM analytics case studies.",
+      "Portfolio of Suhasini Pillay, IT and business systems analyst: SQL, Power BI, Tableau, Python and ITSM analytics case studies.",
   },
 
   /* -------------------------------------------------------------- NAV */
@@ -34,7 +34,7 @@ window.SITE = {
   hero: {
     eyebrow: "Portfolio · Pune, Maharashtra, India",
     name: "Suhasini Pillay",
-    role: "Data & Business Systems Analyst",
+    role: "IT & Business Systems Analyst",
     headline: "I turn service and business data into decisions people act on.",
     scrollCue: "Scroll",
   },
